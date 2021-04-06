@@ -1,6 +1,10 @@
 package Admin.Models;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name="category")
@@ -11,8 +15,12 @@ public class Category {
     @Column(name="name")
     private String categoryName;
     @ManyToOne
-    @JoinColumn(name="parentCategory_id")
+    @JoinColumn(name="parent_category_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Category parentCategory;
+
+    @OneToMany(mappedBy = "productCategory", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Product> products;
 
     public Category(){}
 
@@ -32,5 +40,9 @@ public class Category {
 
     public Category getParentCategory() {
         return parentCategory;
+    }
+
+    public List<Product> getProducts() {
+        return products;
     }
 }

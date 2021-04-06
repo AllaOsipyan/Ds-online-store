@@ -1,5 +1,8 @@
 package Admin.Models;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import javax.persistence.*;
 
 @Entity
@@ -12,8 +15,8 @@ public class Product {
     private String name;
     @Column(name="price")
     private double price;
-    @ManyToOne
-    @JoinColumn(name="category_id", nullable=false) //??Сделать отдельную сущность
+    @ManyToOne(cascade = CascadeType.REFRESH)
+    @JoinColumn(name="category_id", nullable=false)
     private Category productCategory;
     @Column(name="image")
     private String imageUrl;
@@ -22,11 +25,11 @@ public class Product {
 
     }
 
-    public Product(Long id, String name, double price, Category category, String imageUrl) {
+    public Product(Long id, String name, double price, Category productCategory, String imageUrl) {
         this.id = id;
         this.name = name;
         this.price = price;
-        this.productCategory = category;
+        this.productCategory = productCategory;
         this.imageUrl = imageUrl;
     }
 
