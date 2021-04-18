@@ -25,6 +25,34 @@ services:
       - SPRING_DATASOURCE_PASSWORD=1234556789
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
       - INSTANCE_NAME=second
+
+  app3:
+    build:
+      context: .
+      dockerfile: Dockerfile_UserCatalog
+    ports:
+      - "8000:8000"
+    depends_on:
+      - mongo
+      - mongo-express
+
+  mongo:
+    image: mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+    volumes:
+      - mongovolume:/data/db
+  mongo-express:
+    image: mongo-express
+    restart: always
+    ports:
+      - "8081:8081"
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: example
+
   nginx:
     build: nginx/.
     ports:
@@ -32,6 +60,7 @@ services:
     links:
       - app1
       - app2
+
   db:
     image: postgres
     environment:
@@ -44,3 +73,4 @@ services:
       - "postgres_db:/var/lib/postgresql/data/"
 volumes:
   postgres_db:
+  mongovolume:
