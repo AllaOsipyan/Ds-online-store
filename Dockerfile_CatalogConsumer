@@ -1,0 +1,12 @@
+FROM maven:latest as build
+COPY pom.xml demo/pom.xml
+COPY CatalogConsumer/pom.xml demo/CatalogConsumer/pom.xml
+COPY CatalogConsumer/src demo/CatalogConsumer/src
+RUN mvn -f demo/CatalogConsumer/pom.xml clean package -DskipTests
+
+FROM java:latest
+
+WORKDIR /src/java
+EXPOSE 8083
+COPY --from=build demo/CatalogConsumer/target/CatalogConsumer-0.0.1-SNAPSHOT.jar /opt/demo/CatalogConsumer/CatalogConsumer-0.0.1-SNAPSHOT.jar
+CMD ["java", "-jar", "/opt/demo/CatalogConsumer/CatalogConsumer-0.0.1-SNAPSHOT.jar"]

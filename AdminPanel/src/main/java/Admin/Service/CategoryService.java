@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class CategoryService {
@@ -22,8 +23,15 @@ public class CategoryService {
 
         return categories;
     }
+    public List<Category> getChildCategories(Long categoryId){
+        return categoryRepository.findChildrenCategories(categoryId);
+    }
 
     public void delete(Long categoryId){
         categoryRepository.deleteById(categoryId);
+    }
+
+    public Category getById(Long id) {
+        return categoryRepository.findById(id).orElse(null);
     }
 }

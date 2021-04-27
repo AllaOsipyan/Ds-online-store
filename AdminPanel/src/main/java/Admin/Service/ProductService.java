@@ -2,6 +2,7 @@ package Admin.Service;
 
 import Admin.Models.Product;
 import Admin.Repositories.ProductRepository;
+import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +15,12 @@ public class ProductService {
     @Autowired
     ProductRepository productRepository;
     public Long createProduct(Product product){
+        System.out.println(product.getProductCategory());
+        Gson gson = new Gson();
+        String JSON = gson.toJson(product);
+        System.out.println( gson.toJson(JSON));
         return productRepository.save(product).getId();
+
     }
     public Product getById(Long id) {
         return productRepository.findById(id).orElse(null);

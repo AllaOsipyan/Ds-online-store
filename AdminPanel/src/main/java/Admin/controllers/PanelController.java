@@ -2,10 +2,10 @@ package Admin.controllers;
 
 import Admin.Models.Category;
 import Admin.Models.Product;
+import Admin.Producer;
 import Admin.Service.CategoryService;
 import Admin.Service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @CrossOrigin
@@ -23,6 +24,9 @@ public class PanelController {
     @Autowired
     CategoryService categoryService;
 
+    @Autowired
+    Producer producer;
+
     @RequestMapping(path = "/", method = RequestMethod.GET)
     public ResponseEntity<?> getHelloWorld(){
         return new ResponseEntity<>("HelloWorld", HttpStatus.OK);
@@ -32,7 +36,14 @@ public class PanelController {
 
     @RequestMapping(path = "/category", method = RequestMethod.POST)
     public ResponseEntity<?> addNewCategory(@RequestBody Category category) {
-        return new ResponseEntity<>(categoryService.createCategory(category), HttpStatus.OK);
+        try {
+            Long categoryId = categoryService.createCategory(category);
+            List<Category> childCategories = categoryService.getChildCategories(categoryId);
+            producer.sendCategory(category);
+            return new ResponseEntity<>(categoryId, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @RequestMapping(path = "/category", method = RequestMethod.GET)
@@ -56,7 +67,11 @@ public class PanelController {
     @RequestMapping(path = "/product", method = RequestMethod.POST)
     public ResponseEntity<?> addProduct(@RequestBody Product product) {
         try {
-            return new ResponseEntity<>(productService.createProduct(product), HttpStatus.OK);
+            System.out.println(product.getName());
+            Long id =productService.createProduct(product);
+            System.out.println(product.getName());
+            producer.sendProduct(product);
+            return new ResponseEntity<>(id, HttpStatus.OK);
         } catch (Exception e){
             return new ResponseEntity<>(e.getStackTrace(), HttpStatus.INTERNAL_SERVER_ERROR);
         }

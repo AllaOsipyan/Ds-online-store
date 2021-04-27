@@ -5,26 +5,20 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    links:
+      - queue
     depends_on:
       - db
+      - queue
+    ports:
+      - "8500:8080"
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/database
       - SPRING_DATASOURCE_USERNAME=postgres
       - SPRING_DATASOURCE_PASSWORD=1234556789
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
       - INSTANCE_NAME=first
-  app2:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    depends_on:
-      - db
-    environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/database
-      - SPRING_DATASOURCE_USERNAME=postgres
-      - SPRING_DATASOURCE_PASSWORD=1234556789
-      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
-      - INSTANCE_NAME=second
+      - RABBIT_CONNECTION=queue
 
   app3:
     build:
@@ -52,14 +46,23 @@ services:
     environment:
       ME_CONFIG_MONGODB_ADMINUSERNAME: root
       ME_CONFIG_MONGODB_ADMINPASSWORD: example
-
-  nginx:
-    build: nginx/.
+  queue:
+    image: rabbitmq:management
+    hostname: rabbit
     ports:
-      - "8500:80"
+      - "15672:15672"
+    volumes:
+      - rabbitvolume:/varlib/rabbitmq/
+  loader:
+    build:
+      context: .
+      dockerfile: Dockerfile_CatalogConsumer
+    environment:
+      - RABBIT_CONNECTION=queue
+      - REDIS_CONNECTION=redis
     links:
-      - app1
-      - app2
+      - queue
+
 
   db:
     image: postgres
@@ -74,3 +77,4 @@ services:
 volumes:
   postgres_db:
   mongovolume:
+  rabbitvolume:

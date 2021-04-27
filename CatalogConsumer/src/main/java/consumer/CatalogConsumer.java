@@ -21,14 +21,14 @@ public class CatalogConsumer {
     }
 
     @Bean
-    public Queue link() {
-        return new Queue("link");
+    public Queue link1() {
+        return new Queue("link1");
     }
 
     @Bean
-    public Binding binding(FanoutExchange fanout,
-                            Queue link) {
-        return BindingBuilder.bind(link).to(fanout);
+    public Binding binding1(FanoutExchange fanout,
+                            Queue link1) {
+        return BindingBuilder.bind(link1).to(fanout);
     }
 
     @Bean

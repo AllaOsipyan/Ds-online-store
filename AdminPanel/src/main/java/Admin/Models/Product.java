@@ -1,5 +1,7 @@
 package Admin.Models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -15,6 +17,7 @@ public class Product {
     private String name;
     @Column(name="price")
     private double price;
+    @JsonIgnore
     @ManyToOne(cascade = CascadeType.REFRESH)
     @JoinColumn(name="category_id", nullable=false)
     private Category productCategory;
@@ -44,12 +47,16 @@ public class Product {
     public double getPrice() {
         return price;
     }
-
+    @JsonIgnore
     public Category getProductCategory() {
         return productCategory;
     }
 
     public String getImageUrl() {
         return imageUrl;
+    }
+    @JsonProperty
+    public void setProductCategory(Category category) {
+        this.productCategory = category;
     }
 }
