@@ -34,4 +34,8 @@ public class CategoryService {
     public Category getById(Long id) {
         return categoryRepository.findById(id).orElse(null);
     }
+
+    public int updateCategory(Category category) {
+        return categoryRepository.update(category.getId(), category.getCategoryName());
+    }
 }

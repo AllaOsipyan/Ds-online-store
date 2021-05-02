@@ -6,27 +6,42 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import org.springframework.data.annotation.Id;
 
+import java.util.List;
+
 @Document(collection = "catalog")
 public class Catalog {
     @Id
-    private ObjectId id;
+    private Long id;
 
     @Indexed
-    private String catalogName;
+    private String categoryName;
 
-    private Catalog parentCatalog;
+    private List<Catalog> childCategories;
+
+    private List<Product> products;
 
     public Catalog(){}
 
-    public ObjectId getId() {
+    public Catalog(Long id, String categoryName, List<Catalog> childCatalogs, List<Product> products) {
+        this.id = id;
+        this.categoryName = categoryName;
+        this.childCategories = childCatalogs;
+        this.products = products;
+    }
+
+    public Long getId() {
         return id;
     }
 
-    public String getCatalogName() {
-        return catalogName;
+    public String getCategoryName() {
+        return categoryName;
     }
 
-    public Catalog getParentCatalog() {
-        return parentCatalog;
+    public List<Catalog> getChildCatalogs() {
+        return childCategories;
+    }
+
+    public List<Product> getProducts() {
+        return products;
     }
 }

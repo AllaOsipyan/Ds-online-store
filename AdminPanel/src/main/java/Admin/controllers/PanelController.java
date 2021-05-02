@@ -45,7 +45,14 @@ public class PanelController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
+    @RequestMapping(path = "/category", method = RequestMethod.PATCH)
+    public ResponseEntity<?> editCategory(@RequestBody Category category) {
+        try {
+            return new ResponseEntity<>(categoryService.updateCategory(category), HttpStatus.OK);
+        } catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
     @RequestMapping(path = "/category", method = RequestMethod.GET)
     public ResponseEntity<?> getAllCategories(){
         try {

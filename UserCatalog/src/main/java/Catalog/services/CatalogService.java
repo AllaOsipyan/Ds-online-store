@@ -12,11 +12,11 @@ public class CatalogService {
     @Autowired
     CatalogRepository catalogRepository;
     public Catalog getCatalogByName(String name) {
-        return catalogRepository.findByCatalogName(name);
+        return catalogRepository.findByCategoryName(name);
     }
 
     public void saveCatalog(Catalog catalog){
-        catalogRepository.save(catalog);
+        catalogRepository.insert(catalog);
     }
 
     public List<Catalog> allCatalogs(){

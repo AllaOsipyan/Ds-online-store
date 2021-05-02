@@ -15,7 +15,6 @@ public class ProductService {
     @Autowired
     ProductRepository productRepository;
     public Long createProduct(Product product){
-        System.out.println(product.getProductCategory());
         Gson gson = new Gson();
         String JSON = gson.toJson(product);
         System.out.println( gson.toJson(JSON));
