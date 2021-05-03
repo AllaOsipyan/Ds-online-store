@@ -6,7 +6,7 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.List;
 
-public interface CatalogRepository extends MongoRepository<Catalog, String> {
+public interface CatalogRepository extends MongoRepository<Catalog, Long> {
     @Query("{ 'categoryName' : {$regex: ?0, $options: 'i' }}")
     Catalog findByCategoryName(final String catalogName);
 

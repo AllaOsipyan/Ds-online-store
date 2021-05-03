@@ -30,17 +30,19 @@ public class Consumer {
             System.out.println(read.getId());
         /*Catalog s = catalogService.getCatalogByChildName(read.getCatalogName());
         System.out.println(s.getId());*/
-            catalogService.saveCatalog(read);
+            
             try {
                 String m = in.substring(in.lastIndexOf("\"parentCateg\":") + 14, in.indexOf("\"thisCateg\":") - 1);
                 System.out.println(m);
                 Catalog par = gson.fromJson(m, Catalog.class);
+                read.setParentCategoryId(par.getId());
                 System.out.println(par.getId());
         /*Catalog s = catalogService.getCatalogByChildName(read.getCatalogName());
         System.out.println(s.getId());*/
                 catalogService.saveCatalog(par);
             } catch (Exception e) {
             }
+            catalogService.saveCatalog(read);
         }catch (Exception e){
 
         }

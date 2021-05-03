@@ -1,10 +1,9 @@
-package Catalog.Models;
+package consumer.Models;
 
 import org.bson.types.ObjectId;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
-
-import org.springframework.data.annotation.Id;
 
 import java.util.List;
 
@@ -19,27 +18,27 @@ public class Catalog {
     private List<Catalog> childCategories;
 
     private List<Product> products;
-
     private Long parentCategoryId;
 
     public Catalog(){}
 
-    public Catalog(Long id, String categoryName, List<Catalog> childCatalogs, List<Product> products) {
+    public Catalog(Long id, String catalogName, List<Catalog> childCatalogs, List<Product> products, Long parentCategoryId) {
         this.id = id;
-        this.categoryName = categoryName;
+        this.categoryName = catalogName;
         this.childCategories = childCatalogs;
         this.products = products;
+        this.parentCategoryId = parentCategoryId;
     }
 
     public Long getId() {
         return id;
     }
 
-    public String getCategoryName() {
+    public String getCatalogName() {
         return categoryName;
     }
 
-    public List<Catalog> getChildCatalogs() {
+    public List<Catalog> getChildCategories() {
         return childCategories;
     }
 
@@ -49,5 +48,9 @@ public class Catalog {
 
     public Long getParentCategoryId() {
         return parentCategoryId;
+    }
+
+    public void setParentCategoryId(Long parentCategoryId) {
+        this.parentCategoryId = parentCategoryId;
     }
 }

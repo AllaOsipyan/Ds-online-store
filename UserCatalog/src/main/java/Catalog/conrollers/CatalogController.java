@@ -21,12 +21,16 @@ public class CatalogController {
         return new ResponseEntity<>("HelloWorld!", HttpStatus.OK);
     }
 
-    @RequestMapping(path = "/userCatalog", method = RequestMethod.GET)
-    public ResponseEntity<?> getByCatalogName(@RequestBody String name){
-        return new ResponseEntity<Catalog>(service.getCatalogByName(name), HttpStatus.OK);
+    @RequestMapping(path = "/catalog/{id}", method = RequestMethod.GET)
+    public ResponseEntity<?> getByCatalogId(@PathVariable Long id){
+        return new ResponseEntity<Catalog>(service.getCatalog(id), HttpStatus.OK);
+    }
+    @RequestMapping(path = "/category", method = RequestMethod.GET)
+    public ResponseEntity<?> getParents(){
+        return new ResponseEntity<List<Catalog>>(service.getAllParentCategories(), HttpStatus.OK);
     }
 
-    @RequestMapping(path = "test", method = RequestMethod.POST)
+    @RequestMapping(path = "/test", method = RequestMethod.POST)
     public ResponseEntity<?> postNewCatalog(@RequestBody Catalog catalog){
         service.saveCatalog(catalog);
         return new ResponseEntity<>(HttpStatus.OK);
